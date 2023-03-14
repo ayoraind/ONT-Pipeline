@@ -1,0 +1,8 @@
+name: medaka_env
+channels:
+  - conda-forge
+  - defaults
+  - bioconda
+dependencies:
+  - bioconda::medaka=1.7.2
+ 

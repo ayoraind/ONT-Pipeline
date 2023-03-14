@@ -1,0 +1,9 @@
+name: porechop_filtlong_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - porechop=0.2.4
+  - filtlong=0.2.1
+ 

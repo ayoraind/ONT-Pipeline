@@ -1,0 +1,7 @@
+test*
+work
+*.nextflow*
+Sample_files
+*.fastq.gz
+results
+G230309.txt
