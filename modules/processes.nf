@@ -192,8 +192,6 @@ process MEDAKA_SECOND_ITERATION {
     
     mv consensus.fasta ${prefix}.fasta
     
-    sed -i "s/^>/>${prefix}_/g" ${prefix}.fasta
-    
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         medaka: \$( medaka --version 2>&1 | sed 's/medaka //g' )

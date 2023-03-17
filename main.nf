@@ -3,44 +3,43 @@
 
 nextflow.enable.dsl=2
 
-/*
-========================================================================================
-                         TAPIR ONT Pipeline
-========================================================================================
-*/
+// include non-process modules
+include { help_message; version_message; complete_message; error_message; pipeline_start_message } from './modules/messages.nf'
+include { default_params; check_params } from './modules/params_parser.nf'
+include { help_or_version } from './modules/params_utilities.nf'
 
-// include definitions
-include  { helpMessage; Version } from './modules/messages.nf'
+version = '1.0dev'
 
-// include workflows
-include { NANOPORE } from './workflows/nanopore.nf'
+// setup default params
+default_params = default_params()
+// merge defaults with user params
+merged_params = default_params + params
+
+// help and version messages
+help_or_version(merged_params, version)
+final_params = check_params(merged_params)
+// starting pipeline
+pipeline_start_message(version, final_params)
+
+// include processes and workflows 
+include { NANOPORE } from './modules/workflow.nf' addParams(final_params)
 
 workflow {
 
 // Setup input Channel from Read path
         reads_ch = channel
-                         .fromPath( params.reads, checkIfExists: true )
+                         .fromPath( final_params.reads )
                          .map { file -> tuple(file.simpleName, file) }
+			 .ifEmpty { error "Cannot find any reads matching: ${final_params.reads}" }
 			 
 	NANOPORE(reads_ch)
 }
 
 
 workflow.onComplete {
-    println ""
-    println "Ran the workflow: ${workflow.scriptName} ${Version}"
-    println "Command line    : ${workflow.commandLine}"
-    println "Pipeline completed at: $workflow.complete"
-    println "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
-    println "Execution duration: $workflow.duration"
-    println "Work directory  : ${workflow.workDir}"
-    println "Thank you for using the ONT pipeline!"
+    complete_message(final_params, workflow, version)
 }
 
 workflow.onError {
-    // Display error message
-        println ""
-        println "Workflow execution stopped with the following message:"
-        println "  " + workflow.errorMessage
-
+    error_message(workflow)
 }
