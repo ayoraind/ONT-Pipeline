@@ -6,10 +6,10 @@ def help_message() {
 
         Mandatory arguments:
          --reads                        Query fastq.gz file of sequences you wish to supply as input (e.g., "/MIGE/01_DATA/01_FASTQ/T055-8-*.fastq.gz")
-         --output_dir                   Output directory to place final combined kraken output (e.g., "/MIGE/01_DATA/03_ASSEMBLY")
-	 --valid_mode                   This should be one of "--pacbio-raw", "--pacbio-corr", "--pacbio-hifi", "--nano-raw", "--nano-corr", or "--nano-hq". [Default: "--nano-raw"]
+         --output_dir                   Output directory to place output files (e.g., "/MIGE/01_DATA/03_ASSEMBLY")
 
         Optional arguments:
+	 --valid_mode                   This should be one of "--pacbio-raw", "--pacbio-corr", "--pacbio-hifi", "--nano-raw", "--nano-corr", or "--nano-hq". [Default: "--nano-raw"]
          --help                         This usage statement.
          --version                      Version statement
         """

@@ -5,3 +5,4 @@ Sample_files
 *.fastq.gz
 results
 G230309.txt
+.default_output
