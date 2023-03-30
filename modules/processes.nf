@@ -84,7 +84,8 @@ process FLYE {
     publishDir "${params.output_dir}/${meta}_FLYE", mode:'copy'
     tag "flye on $meta"
     
-    errorStrategy 'ignore'
+    errorStrategy { task.attempt <= 5 ? "retry" : "finish" }
+    maxRetries 5
     
     conda "/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/filter_assemble_error-correct_ont/conda_environments/flye_env.yml"
     // when used outside the TAPIR network, simply edit the code by writing the correct file path to the yml file and use conda '/path/to/flye_env.yml)'
