@@ -1,8 +1,8 @@
-name: medaka_env
+name: flye
 channels:
   - conda-forge
   - defaults
   - bioconda
 dependencies:
-  - bioconda::medaka=1.7.2
+  - bioconda::flye=2.9.1
  

@@ -1,8 +1,5 @@
 process PORECHOP {
     tag "Porechop on $sample_id"
-
-    conda "/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/filter_assemble_error-correct_ont/conda_environments/porechop_filtlong_env.yml"
-    // when used outside the TAPIR network, simply edit the code by writing the correct file path to the yml file and use conda '/path/to/porechop_filtlong_env.yml)'
     
     input:
     tuple val(sample_id), path(reads)
@@ -44,9 +41,6 @@ process FILTLONG {
     
     publishDir "${params.output_dir}", mode:'copy'
     
-    conda "/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/filter_assemble_error-correct_ont/conda_environments/porechop_filtlong_env.yml"
-    // when used outside the TAPIR network, simply edit the code by writing the correct file path to the yml file and use conda '/path/to/porechop_filtlong_env.yml)'
-
     input:
     tuple val(sample_id), path(reads)
 
@@ -87,9 +81,6 @@ process FLYE {
     errorStrategy { task.attempt <= 5 ? "retry" : "finish" }
     maxRetries 5
     
-    conda "/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/filter_assemble_error-correct_ont/conda_environments/flye_env.yml"
-    // when used outside the TAPIR network, simply edit the code by writing the correct file path to the yml file and use conda '/path/to/flye_env.yml)'
-
     input:
     tuple val(meta), path(reads)
     val mode
@@ -138,10 +129,7 @@ process MEDAKA_FIRST_ITERATION {
     errorStrategy 'ignore'
     
     // publishDir "${params.output_dir}", mode:'copy'
-    
-    conda '/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/filter_assemble_error-correct_ont/conda_environments/medaka_env.yml'
-    // when used outside the TAPIR network, simply edit the code by writing the correct file path to the yml file and use conda '/path/to/medaka_env.yml)'
-    
+        
     input:
     tuple val(meta), path(reads), path(assembly)
 
@@ -174,11 +162,7 @@ process MEDAKA_SECOND_ITERATION {
     publishDir "${params.output_dir}/${meta}_FLYE_MEDAKA", mode:'copy'
     
     errorStrategy 'ignore'
-    
-    
-    conda '/MIGE/01_DATA/07_TOOLS_AND_SOFTWARE/nextflow_pipelines/filter_assemble_error-correct_ont/conda_environments/medaka_env.yml'
-    // when used outside the TAPIR network, simply edit the code by writing the correct file path to the yml file and use conda '/path/to/medaka_env.yml)'
-    
+        
     input:
     tuple val(meta), path(reads), path(assembly)
 
