@@ -1,4 +1,4 @@
-name: porechop_filtlong_env
+name: porechop_filtlong
 channels:
   - conda-forge
   - bioconda
