@@ -30,7 +30,7 @@ This pipeline removes adapters from raw reads, filters reads, assembles and erro
 An example of a command to run this pipeline is:
 
 ```
-nextflow run main.nf --reads "Sample_files/*.fastq.gz" --output_dir "test2" 
+nextflow run main.nf --reads "Sample_files/*.fastq.gz" --output_dir "test2" --sequencing_date 'G230524'
 ```
 
 ## Word of Note
