@@ -1,7 +1,7 @@
 // Include modules
 
 
-include { PORECHOP; FILTLONG; FLYE; MEDAKA_FIRST_ITERATION; MEDAKA_SECOND_ITERATION } from '../modules/processes.nf'
+include { PORECHOP; FILTLONG; NANOPLOT; NANOSTATS_TRANSPOSE; COMBINE_NANOSTATS; FLYE; MEDAKA_FIRST_ITERATION; MEDAKA_SECOND_ITERATION } from '../modules/processes.nf'
 
 		 
 // def workflow
@@ -20,6 +20,15 @@ workflow NANOPORE {
     
        	FILTLONG(PORECHOP.out.fastqs_ch)
 	versions_overall_ch = versions_overall_ch.mix(FILTLONG.out.versionsfilt_ch)
+	
+	NANOPLOT(FILTLONG.out.fastqsfilt_ch)
+	versions_overall_ch = versions_overall_ch.mix(NANOPLOT.out.versions_ch)
+
+        NANOSTATS_TRANSPOSE(NANOPLOT.out.txt_ch)
+
+        collected_nanostatistics_ch = NANOSTATS_TRANSPOSE.out.nanostats_ch.collect( sort: {a, b -> a[0].getBaseName() <=> b[0].getBaseName()} )
+
+        COMBINE_NANOSTATS(collected_nanostatistics_ch, params.sequencing_date)
     
        	FLYE(FILTLONG.out.fastqsfilt_ch, params.valid_mode) 
 	versions_overall_ch = versions_overall_ch.mix(FLYE.out.versions_ch)

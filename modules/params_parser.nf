@@ -9,6 +9,7 @@ def default_params(){
     params.reads = false
     params.valid_mode = false
     params.output_dir = false
+    params.sequencing_date = false
     return params
 }
 
@@ -20,6 +21,9 @@ def check_params(Map params) {
      
     // set up output directory
     final_params.output_dir = check_mandatory_parameter(params, 'output_dir') - ~/\/$/
+    
+    // set up sequencing date
+    final_params.sequencing_date = check_mandatory_parameter(params, 'sequencing_date')
      
     // set up valid mode
     final_params.valid_mode = check_mandatory_parameter(params, 'valid_mode')

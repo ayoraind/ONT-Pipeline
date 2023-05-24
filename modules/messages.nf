@@ -2,11 +2,12 @@ def help_message() {
   log.info """
         Usage:
         The typical command for running the pipeline is as follows:
-        nextflow run main.nf --reads "PathToReadFile(s)" --output_dir "PathToOutputDir"  
+        nextflow run main.nf --reads "PathToReadFile(s)" --output_dir "PathToOutputDir" --sequencing_date 'GYYMMDD'
 
         Mandatory arguments:
          --reads                        Query fastq.gz file of sequences you wish to supply as input (e.g., "/MIGE/01_DATA/01_FASTQ/T055-8-*.fastq.gz")
          --output_dir                   Output directory to place output files (e.g., "/MIGE/01_DATA/03_ASSEMBLY")
+	 --sequencing_date		Sequencing Date (e.g., GYYMMDD)
 
         Optional arguments:
 	 --valid_mode                   This should be one of "--pacbio-raw", "--pacbio-corr", "--pacbio-hifi", "--nano-raw", "--nano-corr", or "--nano-hq". [Default: "--nano-raw"]
