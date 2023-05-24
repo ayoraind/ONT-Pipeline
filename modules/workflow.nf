@@ -1,7 +1,7 @@
 // Include modules
 
 
-include { PORECHOP; FILTLONG; NANOPLOT; NANOSTATS_TRANSPOSE; COMBINE_NANOSTATS; FLYE; MEDAKA_FIRST_ITERATION; MEDAKA_SECOND_ITERATION } from '../modules/processes.nf'
+include { PORECHOP; FILTLONG; NANOPLOT; NANOSTATS_TRANSPOSE; COMBINE_NANOSTATS; FLYE; MEDAKA_FIRST_ITERATION; MEDAKA_SECOND_ITERATION; QUAST; QUAST_SUMMARY; QUAST_MULTIQC } from '../modules/processes.nf'
 
 		 
 // def workflow
@@ -41,6 +41,14 @@ workflow NANOPORE {
     
     	MEDAKA_SECOND_ITERATION(joined_final_ch)
 	versions_overall_ch = versions_overall_ch.mix(MEDAKA_SECOND_ITERATION.out.versions_ch)
+	
+	QUAST(MEDAKA_SECOND_ITERATION.out.second_iteration_ch)
+	 
+        collected_quaststatistics_ch = QUAST.out.quast_transposed_report_ch.collect( sort: {a, b -> a[0].getBaseName() <=> b[0].getBaseName()} )
+
+        QUAST_SUMMARY(collected_quaststatistics_ch, params.sequencing_date)
+	 
+	QUAST_MULTIQC(QUAST.out.quast_dir_ch.collect())
 	
     
     emit:
