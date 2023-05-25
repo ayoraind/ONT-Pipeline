@@ -7,15 +7,15 @@
  ONT PIPELINE - RAW READS TO ERROR-CORRECTED ASSEMBLIES: TAPIR Pipeline version 1.0dev
 ======================================================================================
  The typical command for running the pipeline is as follows:
-        nextflow run main.nf --reads "PathToReadFile(s)" --output_dir "PathToOutputDir" --sequencing_date
+        nextflow run main.nf --reads "PathToReadFile(s)" --output_dir "PathToOutputDir" 
 
         Mandatory arguments:
          --reads                        Query fastq.gz file of sequences you wish to supply as input (e.g., "/MIGE/01_DATA/01_FASTQ/T055-8-*.fastq.gz")
          --output_dir                   Output directory to place output files (e.g., "/MIGE/01_DATA/03_ASSEMBLY")
-	 --sequencing_date		E.g GYYMMDD
-         	 
+	 	 
         Optional arguments:
 	 --valid_mode                   This should be one of "--pacbio-raw", "--pacbio-corr", "--pacbio-hifi", "--nano-raw", "--nano-corr", or "--nano-hq". [Default: "--nano-raw"]
+	 --sequencing_date		E.g 2023-05-25 or 20230525 or 230525 or G230505 or any date format of your choice
          --help                         This usage statement.
          --version                      Version statement
 
@@ -30,7 +30,7 @@ This pipeline removes adapters from raw reads, filters reads, assembles and erro
 An example of a command to run this pipeline is:
 
 ```
-nextflow run main.nf --reads "Sample_files/*.fastq.gz" --output_dir "test2" --sequencing_date 'G230524'
+nextflow run main.nf --reads "Sample_files/*.fastq.gz" --output_dir "test2"
 ```
 
 ## Word of Note
