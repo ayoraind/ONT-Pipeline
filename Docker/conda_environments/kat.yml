@@ -1,0 +1,9 @@
+name: kat
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - kat=2.4.1
+  - mash=2.1
+  - jq=1.6
