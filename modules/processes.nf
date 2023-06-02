@@ -169,6 +169,45 @@ process COMBINE_NANOSTATS {
     """
 }
 
+process GENOME_SIZE_ESTIMATION {
+    tag { sample_id }
+  //  publishDir "${params.output_dir}/${sample_id}_genome_size", mode:'copy'
+    
+    input:
+    tuple val(sample_id), path(reads)
+
+    output:
+    tuple val(sample_id), path('mash_stats.out')
+
+    script:
+    if (params.kmer_min_copy)
+      """
+        mash sketch -o sketch_${sample_id}  -k 32 -m ${params.kmer_min_copy} -r ${reads}  2> mash_stats.out
+      """
+    else
+      """
+      kat hist --mer_len 21  --thread 1 --output_prefix ${sample_id} ${reads} > /dev/null 2>&1 \
+      && minima=`cat  ${sample_id}.dist_analysis.json | jq '.global_minima .freq' | tr -d '\\n'`
+      mash sketch -o sketch_${sample_id}  -k 32 -m \$minima -r ${reads}  2> mash_stats.out
+      """
+}
+
+process WRITE_OUT_EXCLUDED_GENOMES {
+    tag { sample_id }
+
+    publishDir "${params.output_dir}/estimated_size_of_excluded_genomes"
+    input:
+    tuple(val(sample_id), val(genome_size))
+
+    output:
+    path("${sample_id}.estimated_genome_size.txt") 
+
+    script:
+    """
+    echo ${genome_size} > ${sample_id}.estimated_genome_size.txt
+    """
+}
+
 process FLYE {
     publishDir "${params.output_dir}/${meta}_FLYE", mode:'copy'
     tag "flye on $meta"
