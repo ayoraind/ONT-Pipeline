@@ -9,7 +9,9 @@ def default_params(){
     params.reads = false
     params.valid_mode = false
     params.output_dir = false
+    params.prescreen_genome_size_check = 4000
     params.sequencing_date = false
+    params.kmer_min_copy = false
     return params
 }
 
