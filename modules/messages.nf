@@ -10,6 +10,7 @@ def help_message() {
 	 
         Optional arguments:
 	 --valid_mode                   This should be one of "--pacbio-raw", "--pacbio-corr", "--pacbio-hifi", "--nano-raw", "--nano-corr", or "--nano-hq". [Default: "--nano-raw"]
+	 --prescreen_genome_size_check	Default value is 4000. This means that any genome with a genome size less than 4000 KB will be excluded.
 	 --sequencing_date		Sequencing Date (e.g., GYYMMDD)
          --help                         This usage statement.
          --version                      Version statement
