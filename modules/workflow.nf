@@ -1,7 +1,9 @@
 // Include modules
 
 
-include { PORECHOP; FILTLONG; NANOPLOT; NANOSTATS_TRANSPOSE; COMBINE_NANOSTATS; FLYE; MEDAKA_FIRST_ITERATION; MEDAKA_SECOND_ITERATION; QUAST; QUAST_SUMMARY; QUAST_MULTIQC } from '../modules/processes.nf'
+include { PORECHOP; FILTLONG; NANOPLOT; NANOSTATS_TRANSPOSE; COMBINE_NANOSTATS; GENOME_SIZE_ESTIMATION; WRITE_OUT_EXCLUDED_GENOMES; FLYE; MEDAKA_FIRST_ITERATION; MEDAKA_SECOND_ITERATION; QUAST; QUAST_SUMMARY; QUAST_MULTIQC } from '../modules/processes.nf'
+
+include { find_genome_size } from '../modules/process_utilities.nf'
 
 		 
 // def workflow
@@ -29,15 +31,34 @@ workflow NANOPORE {
         collected_nanostatistics_ch = NANOSTATS_TRANSPOSE.out.nanostats_ch.collect( sort: {a, b -> a[0].getBaseName() <=> b[0].getBaseName()} )
 
         COMBINE_NANOSTATS(collected_nanostatistics_ch, params.sequencing_date)
-    
-       	FLYE(FILTLONG.out.fastqsfilt_ch, params.valid_mode) 
+	
+	GENOME_SIZE_ESTIMATION(FILTLONG.out.fastqsfilt_ch)
+        
+	genome_sizes_ch = GENOME_SIZE_ESTIMATION.out.map { sample_id, path -> find_genome_size(sample_id, path.text) }
+	
+	// pre-screen check based on genome size
+        if (params.prescreen_genome_size_check) {
+        excluded_genomes_based_on_size_ch = genome_sizes_ch.filter { it[1] <= params.prescreen_genome_size_check }
+	
+	WRITE_OUT_EXCLUDED_GENOMES(excluded_genomes_based_on_size_ch)
+	
+	included_genomes_based_on_size_ch = genome_sizes_ch.filter { it[1] > params.prescreen_genome_size_check }
+	
+	included_sample_id_and_reads_ch = FILTLONG.out.fastqsfilt_ch
+                						.join(included_genomes_based_on_size_ch)
+                						.map { items -> [items[0], items[1]] }
+
+        }
+
+	
+       	FLYE(included_sample_id_and_reads_ch, params.valid_mode) 
 	versions_overall_ch = versions_overall_ch.mix(FLYE.out.versions_ch)
     
-       	joined_ch = FILTLONG.out.fastqsfilt_ch.join(FLYE.out.fasta_ch)
+       	joined_ch = included_sample_id_and_reads_ch.join(FLYE.out.fasta_ch)
     
     	MEDAKA_FIRST_ITERATION(joined_ch)
     
-    	joined_final_ch = FILTLONG.out.fastqsfilt_ch.join(MEDAKA_FIRST_ITERATION.out.first_iteration_ch)
+    	joined_final_ch = included_sample_id_and_reads_ch.join(MEDAKA_FIRST_ITERATION.out.first_iteration_ch)
     
     	MEDAKA_SECOND_ITERATION(joined_final_ch)
 	versions_overall_ch = versions_overall_ch.mix(MEDAKA_SECOND_ITERATION.out.versions_ch)
