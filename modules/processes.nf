@@ -1,3 +1,34 @@
+process PRE_SCREEN_FASTQ_FILESIZE {
+    tag { sample_id }
+    
+    input:
+    tuple val(sample_id), path(reads)
+    
+
+    output:
+    tuple(val(sample_id), stdout)
+
+    script:
+    """
+    stat -Lc %s ${reads} |  awk '{printf "%f", \$1/1000000}'
+    """
+}
+
+process WRITE_OUT_FILESIZE_CHECK {
+    tag { sample_id }
+
+    input:
+    tuple val(sample_id), val(file_size)
+
+    output:
+    tuple(val(sample_id), path("${sample_id}.file_size_check.tsv"))
+
+    script:
+    """
+    echo "file\tsize\n${sample_id}\t${file_size}" > ${sample_id}.file_size_check.tsv
+    """
+}
+
 process PORECHOP {
     tag "Porechop on $sample_id"
     memory { 4.GB * task.attempt }
