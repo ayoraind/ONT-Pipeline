@@ -21,6 +21,8 @@ RUN mamba env create -f /medaka.yml && conda clean -a
 COPY Docker/conda_environments/porechop_filtlong.yml /
 RUN mamba env create -f /porechop_filtlong.yml && conda clean -a
 
+COPY bin/transpose_nanoplot.sh /usr/local/bin/
 
-ENV PATH /opt/conda/bin:/opt/conda/condabin:/opt/conda/envs/flye/bin:/opt/conda/envs/medaka/bin:/opt/conda/envs/porechop_filtlong/bin:/opt/conda/envs/nanoplot/bin:/opt/conda/envs/quast/bin:$PATH
+
+ENV PATH /opt/conda/bin:/opt/conda/condabin:/opt/conda/envs/flye/bin:/opt/conda/envs/kat/bin:/opt/conda/envs/medaka/bin:/opt/conda/envs/porechop_filtlong/bin:/opt/conda/envs/nanoplot/bin:/opt/conda/envs/quast/bin:$PATH
 
