@@ -15,7 +15,7 @@
 	 	 
         Optional arguments:
 	 --valid_mode                   This should be one of "--pacbio-raw", "--pacbio-corr", "--pacbio-hifi", "--nano-raw", "--nano-corr", or "--nano-hq". [Default: "--nano-raw"]
-	 --prescreen_genome_size_check  Default value is 4000. This means that any genome with a genome size less than 4000 KB will be excluded.
+	 --prescreen_genome_size_check  Default value is 2000. This means that any genome with a genome size less than 2000 KB will be excluded.
 	 --prescreen_file_size_check	Default value is 5. This means that any genome with a file size less than 5 MB will be excluded.
 	 --sequencing_date		E.g 2023-05-25 or 20230525 or 230525 or G230505 or any date format of your choice. Default date is the current date.
          --help                         This usage statement.
