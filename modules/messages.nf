@@ -60,7 +60,7 @@ def complete_message(Map params, nextflow.script.WorkflowMetadata workflow, Stri
     log.info "Success         : ${workflow.success}"
     log.info "Work directory  : ${workflow.workDir}"
     log.info "Exit status     : ${workflow.exitStatus}"
-    log.info "Thank you for using the ONT pipeline!"
+    log.info "Thank you for using the ONT Assembly pipeline!"
     log.info ""
 }
 
