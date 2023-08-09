@@ -25,7 +25,7 @@
 
 
 ## Introduction
-This pipeline removes adapters from raw reads, filters reads, assembles and error-corrects genomes.   
+This pipeline removes adapters from raw reads (generated from third-generation sequencers), filters reads, assembles and error-corrects genomes.   
 
 
 ## Sample command
